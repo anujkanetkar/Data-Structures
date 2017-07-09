@@ -1,6 +1,7 @@
 #include <iostream>
 
 using namespace std;
+
 #define ROWS 10
 #define COLS 10
 #define NOTUT 0
@@ -18,6 +19,12 @@ class matrix
 		matrix()
 		{
 			m = n = 0;
+		}
+
+		matrix(int m, int n)
+		{
+			this->m = m;
+			this->n = n;			
 		}
 
 		void create()
@@ -90,23 +97,22 @@ class matrix
 				cout << "Entered matrix isn't a square matrix" << endl;
 		}
 
-		matrix transpose()
+		void transpose()
 		{
 			int i,j;
 			matrix mat1;
 			for(i=0; i<m; i++)
 			{
 				for(j=0; j<n; j++)
-					mat1.mat[j][i] = mat[i][j];
+					mat[j][i] = mat[i][j];
 			}
-			return mat1;
 		}
 
 		matrix add(matrix mat2)
 		{
 			int i,j;
-			matrix mat3;
-			if(m == n)
+			matrix mat3(m,n);
+			if(mat2.m == m && mat2.n == n)
 			{
 				for(i=0; i<m; i++)
 				{
@@ -116,41 +122,46 @@ class matrix
 				return mat3;
 			}
 			else
-				cout << "The entered matrix isn't a square matrix" << endl;
+				cout << "The entered matrices aren't compatible for addition" << endl;
 
 		}
 
 		matrix sub(matrix mat2)
 		{
 			int i,j;
-			matrix mat3;
-			if(m == n)
+			matrix mat3(m,n);
+			if(mat2.m == m && mat2.n == n)
 			{
 				for(i=0; i<m; i++)
 				{
 					for(j=0; j<n; j++)
-						mat3.mat[i][j] = mat[i][j]+ mat2.mat[i][j];
+						mat3.mat[i][j] = mat[i][j] -  mat2.mat[i][j];
 				}
 				return mat3;
 			}
 			else
-				cout << "The matrix isn't a square matrix" << endl;
+				cout << "The entered matrices aren't compatible for subtraction" << endl;
 		}
 		matrix mul(matrix mat2)
 		{
 			int i,j,k;
-			matrix mat3;
-
-			for(k=0; k<m; k++)
+			matrix mat3(m,mat2.n);
+			
+			if(n == mat2.m)
 			{
-				for(i=0; i<n; i++)
+				for(i=0; i<m; i++)
 				{
-					mat3.mat[k][i] = 0;
 					for(j=0; j<n; j++)
-						mat3.mat[k][i] = mat3.mat[k][i] + mat[j][i] * mat2.mat[i][k];
+					{
+						mat3.mat[i][j] = 0;
+						for(k=0; k<n; k++)
+							mat3.mat[i][j] = mat3.mat[i][j] + mat[i][k] * mat2.mat[k][j];
+					}
 				}
-			}
 			return mat3;
+			}
+			else
+				cout << "The entered matrices aren't compatible for multiplication" << endl;
 		}
 
 		void saddle()
@@ -191,7 +202,7 @@ int main()
 	int choice;
 	while(1)
 	{
-		cout << "Enter choice: 1 for upper triangular, 2 for sum of diagonal elements, 3 for transpose, 4 for addiion, subtraction, multiplication, 5 for saddle pt " << endl;
+		cout << "Enter choice: 1 for upper triangular, 2 for sum of diagonal elements, 3 for transpose, 4 for addition, 5 for subtraction, 6 for multiplication, 7 for saddle pt " << endl;
 		cin >> choice;
 		switch(choice)
 		{
@@ -208,22 +219,32 @@ int main()
 			case 3:
 				m.create();
 				m.display();
-				m=m.transpose();
+				m.transpose();
 				m.display();
 				break;
 			case 4:
 				m1.create();
-				m2.create();
 				m1.display();
+				m2.create();
 				m2.display();
 				m3 = m1.add(m2);
 				m3.display();
+			case 5:
+				m1.create();
+				m1.display();
+				m2.create();
+				m2.display();
 				m3 = m1.sub(m2);
 				m3.display();
+			case 6:
+				m1.create();
+				m1.display();
+				m2.create();
+				m2.display();
 				m3 = m1.mul(m2);
 				m3.display();
 				break;
-			case 5:
+			case 7:
 				m.create();
 				m.display();
 				m.saddle();
