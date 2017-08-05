@@ -33,9 +33,10 @@ class LinkedList
 		void addmember(int, string, int);
 		void delprez();
 		void delsecy();
-		void delmember(int, string);
+		void delmember(int);
 		int count();
 		void display();
+		void disp_rev(Node*);
 		void concatenate(LinkedList);
 		void sort();
 };
@@ -58,7 +59,8 @@ void LinkedList :: addsecy(int n, string s)
 	r -> name = s;
 	if(p == NULL)
 	{
-		p = r;
+		//p = r;
+		cout << "Empty list" << endl;
 	}
 	else
 	{
@@ -74,8 +76,7 @@ void LinkedList :: addsecy(int n, string s)
 void LinkedList :: addmember(int n, string s, int pos)
 {
 	int i;
-	Node *t, *r;
-	t = p;
+	Node *t, *r, *prev;
 	if(p == NULL)
 	{
 		cout << "Empty list" << endl;
@@ -83,19 +84,25 @@ void LinkedList :: addmember(int n, string s, int pos)
 	}
 	else
 	{
+		t = p;
 		for(i=0; i<pos; i++)
 		{
-			if(t -> link == NULL)
+			if(t -> link != NULL)
+			{
+				prev = t;
+				t = t -> link;
+			}
+			else
 			{
 				break;
 			}
-			t = t -> link;
 		}
 		r = new Node;
 		r -> prn = n;
 		r -> name = s;
-		r -> link = t -> link;
-		t -> link = r;
+		r -> link = t;
+		prev -> link = r;
+		
 	}
 }
 
@@ -118,15 +125,16 @@ void LinkedList :: delsecy()
 		t = t -> link;
 	}
 	delete t;
+	prev -> link = NULL;
 }
 
-void LinkedList :: delmember(int n, string s)
+void LinkedList :: delmember(int n)
 {
 	Node *t, *prev;
 	t = p;
 	while(t != NULL)
 	{
-		if(t -> prn == n && t -> name == s)
+		if(t -> prn == n)
 		{
 			if(t == p)
 			{
@@ -134,13 +142,16 @@ void LinkedList :: delmember(int n, string s)
 			}
 			else
 			{
-					prev -> link = t -> link;
+				prev -> link = t -> link;
 			}
 			delete t;
 			return;
 		}
-		prev = t;
-		t = t -> link;
+		else
+		{
+			prev = t;
+			t = t -> link;
+		}
 	}
 	cout << "Element not found" << endl;
 }
@@ -148,9 +159,11 @@ void LinkedList :: delmember(int n, string s)
 int LinkedList :: count()
 {
 	int c;
-	while(p != NULL)
+	Node *t;
+	t = p;
+	while(t != NULL)
 	{
-		p = p -> link;
+		t = t -> link;
 		c++;
 	}
 	return c;
@@ -158,10 +171,29 @@ int LinkedList :: count()
 
 void LinkedList :: display()
 {
-	while(p != NULL)
+	Node *t;
+	t = p;
+	while(t != NULL)
 	{
-		cout << p -> prn << " " << p -> name << "\t";
-		p = p -> link;
+		cout << t -> prn << " " << t -> name << "\t";
+		t = t -> link;
+	}
+}
+
+void LinkedList :: disp_rev(Node *t)
+{
+	t = p;
+	if(t == NULL)
+	{
+		return;	
+	}
+	else
+	{
+		while(t != NULL)
+		{
+			disp_rev(t -> link);
+			cout << t -> prn << " " << t -> name << "\t";
+		}
 	}
 }
 
@@ -179,7 +211,7 @@ void LinkedList :: concatenate(LinkedList l)
 
 void LinkedList :: sort()
 {
-	Node *t;
+	Node *t, *r;
 	int temp_prn;
 	string temp_name;
 	if(p == NULL)
@@ -189,23 +221,24 @@ void LinkedList :: sort()
 	}
 	else
 	{
-		while(p != NULL)
+		r = p;
+		while(r -> link != NULL)
 		{
-			t = p -> link;
+			t = r -> link;
 			while(t != NULL)
 			{
-				if(p -> prn > t -> prn)
+				if(r -> prn > t -> prn)
 				{
-					temp_prn = p -> prn;
-					p -> prn = t -> prn;
+					temp_prn = r -> prn;
+					r -> prn = t -> prn;
 					t -> prn = temp_prn;
-					temp_name = p -> name;
-					p -> name = t -> name;
+					temp_name = r -> name;
+					r -> name = t -> name;
 					t -> name = temp_name;			
 				}
 				t = t -> link;
 			}
-			p = p -> link;
+			r = r -> link;
 		}
 	}
 }
@@ -227,6 +260,7 @@ int main()
 		cout << "8. Total members" << endl;
 		cout << "9. Display in reverse" << endl;
 		cout << "10. Concatenate lists" << endl;
+		cout << "11. Sort" << endl;
 		cin >> choice;
 		switch(choice)
 		{
@@ -266,9 +300,9 @@ int main()
 				ll.delsecy();
 				break;
 			case 7:
-				cout << "Enter value/data to be deleted";
-				cin >> n >> s;
-				ll.delmember(n,s);
+				cout << "Enter prn to be deleted";
+				cin >> n;
+				ll.delmember(n);
 				break;
 			case 8:
 				cnt = ll.count();
