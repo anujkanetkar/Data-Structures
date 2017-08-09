@@ -14,31 +14,33 @@ class Node
 			prn = PRN;
 			name = s;
 		}*/
-
 		friend class LinkedList;
 };
 
 class LinkedList
 {
 	private:
-		Node *p;
+	Node *p;
 	public:
 		LinkedList()
 		{
 			p = NULL;
 		}
 
-		void addprez(int, string);
-		void addsecy(int, string);
-		void addmember(int, string, int);
-		void delprez();
-		void delsecy();
-		void delmember(int);
-		int count();
-		void display();
-		void disp_rev(Node*);
-		void concatenate(LinkedList);
-		void sort();
+	void addprez(int, string);
+	void addsecy(int, string);
+	void addmember(int, string, int);
+	void delprez();
+	void delsecy();
+	void delmember(int);
+	int count();
+	void display();
+	void disp_rev();
+	void disp_rev(Node*);
+	void concatenate(LinkedList);
+	void sort();
+	LinkedList merge(LinkedList);
+	void insert(int, string);
 };
 
 void LinkedList :: addprez(int n, string s)
@@ -47,7 +49,7 @@ void LinkedList :: addprez(int n, string s)
 	t = new Node;
 	t -> prn = n;
 	t -> name = s;
-	t -> link = p;
+	t -> link = NULL;
 	p = t;
 }
 
@@ -61,6 +63,30 @@ void LinkedList :: addsecy(int n, string s)
 	{
 		//p = r;
 		cout << "Empty list" << endl;
+		return;
+	}
+	else
+	{
+		t = p;
+		while(t -> link != NULL)
+		{
+			t = t -> link;
+		}
+		t -> link = r;
+	}
+	r -> link = NULL;
+}
+
+void LinkedList :: insert(int n, string s)
+{	
+	Node *r, *t;
+	r = new Node;
+	r -> prn = n;
+	r -> name = s;
+	r -> link = NULL;
+	if(p == NULL)
+	{
+		p = r;
 	}
 	else
 	{
@@ -102,7 +128,6 @@ void LinkedList :: addmember(int n, string s, int pos)
 		r -> name = s;
 		r -> link = t;
 		prev -> link = r;
-		
 	}
 }
 
@@ -180,12 +205,12 @@ void LinkedList :: display()
 	}
 }
 
-void LinkedList :: disp_rev(Node *t)
+/*void LinkedList :: disp_rev(Node *t)
 {
 	t = p;
 	if(t == NULL)
 	{
-		return;	
+		return;
 	}
 	else
 	{
@@ -195,18 +220,53 @@ void LinkedList :: disp_rev(Node *t)
 			cout << t -> prn << " " << t -> name << "\t";
 		}
 	}
+}*/
+
+void LinkedList :: disp_rev()
+{
+	Node *t;
+	t = p;
+	if(t == NULL)
+	{
+		return;
+	}
+	else
+	{
+		disp_rev(p);
+	}
 }
+
+void LinkedList :: disp_rev(Node *x)
+{
+	Node *r;
+	if(x == NULL)
+	{
+		return;
+	}
+	else
+	{
+		disp_rev(x -> link);
+		cout << x -> prn << " " << x -> name << "\t";
+	}
+}
+
 
 void LinkedList :: concatenate(LinkedList l)
 {
 	Node *t;
 	t = p;
-	while(t -> link != NULL)
+	if(p == NULL)
 	{
-		t = t -> link;
+		cout << "Empty List" << endl;
 	}
-	t -> link = l.p;
-	delete l.p;
+	else
+	{
+		while(t -> link != NULL)
+		{
+			t = t -> link;
+		}
+		t -> link = l.p;
+	}
 }
 
 void LinkedList :: sort()
@@ -234,7 +294,7 @@ void LinkedList :: sort()
 					t -> prn = temp_prn;
 					temp_name = r -> name;
 					r -> name = t -> name;
-					t -> name = temp_name;			
+					t -> name = temp_name;
 				}
 				t = t -> link;
 			}
@@ -243,9 +303,41 @@ void LinkedList :: sort()
 	}
 }
 
+LinkedList LinkedList :: merge(LinkedList l)
+{
+	LinkedList sll;
+	Node *t1, *t2;
+	t1 = p;
+	t2 = l.p;
+	while(t1 != NULL && t2 != NULL)
+	{
+		if(t1 -> prn < t2 -> prn)
+		{
+			sll.insert(t1 -> prn, t1 -> name);
+			t1 = t1 -> link;
+		}
+		else
+		{
+			sll.insert(t2 -> prn, t2 -> name);
+			t2 = t2 -> link;
+		}
+	}
+	while(t1 != NULL)
+	{
+		sll.insert(t1 -> prn, t1 -> name);
+		t1 = t1 -> link;
+	}
+	while(t2 != NULL)
+	{
+		sll.insert(t2 -> prn, t2 -> name);
+		t2 = t2 -> link;
+	}
+	return sll;
+}
+
 int main()
 {
-	LinkedList ll, ll1;
+	LinkedList ll, ll1, ll2, ll3;
 	int choice, n, pos, cnt;
 	string s;
 	while(true)
@@ -261,6 +353,7 @@ int main()
 		cout << "9. Display in reverse" << endl;
 		cout << "10. Concatenate lists" << endl;
 		cout << "11. Sort" << endl;
+		cout << "12. Merge" << endl;
 		cin >> choice;
 		switch(choice)
 		{
@@ -300,7 +393,7 @@ int main()
 				ll.delsecy();
 				break;
 			case 7:
-				cout << "Enter prn to be deleted";
+				cout << "Enter PRN to be deleted" << endl;
 				cin >> n;
 				ll.delmember(n);
 				break;
@@ -308,33 +401,69 @@ int main()
 				cnt = ll.count();
 				cout << "Total no of members are: " << cnt << endl;
 				break;
+			case 9:
+				ll.disp_rev();
 			case 10:
-				cout << "Enter PRN no:" << endl;
+				cout << "Enter President's PRN no:" << endl;
 				cin >> n;
-				cout << "Enter name:" << endl;
+				cout << "Enter President's name:" << endl;
 				cin.ignore();
 				getline(cin, s);
 				ll1.addprez(n,s);
-				cout << "Enter PRN no:" << endl;
+				cout << "Enter Secretary's PRN no:" << endl;
 				cin >> n;
-				cout << "Enter name:" << endl;
+				cout << "Enter Secretary's name:" << endl;
 				cin.ignore();
 				getline(cin, s);
 				ll1.addsecy(n,s);
-				cout << "Enter PRN no:" << endl;
+				cout << "Enter member's PRN no:" << endl;
 				cin >> n;
-				cout << "Enter name:" << endl;
+				cout << "Enter member's name:" << endl;
 				cin.ignore();
 				getline(cin, s);
 				cout << "Enter position:" << endl;
 				cin >> pos;
 				ll1.addmember(n,s,pos);
+				cout << "Enter member's PRN no:" << endl;
+				cin >> n;
+				cout << "Enter member's name:" << endl;
+				cin.ignore();
+				getline(cin, s);
+				cout << "Enter position:" << endl;
+				cin >> pos;
+				ll1.addmember(n,s,pos);
+				ll1.display();
 				ll.concatenate(ll1);
+				ll.display();
+				break;
 			case 11:
 				ll.sort();
+				break;
+			case 12:
+				cout << "Enter President's PRN no:" << endl;
+				cin >> n;
+				cout << "Enter President's name:" << endl;
+				cin.ignore();
+				getline(cin, s);
+				ll2.addprez(n,s);
+				cout << "Enter Secretary's PRN no:" << endl;
+				cin >> n;
+				cout << "Enter Secretary's name:" << endl;
+				cin.ignore();
+				getline(cin, s);
+				ll2.addsecy(n,s);
+				cout << "Enter member's PRN no:" << endl;
+				cin >> n;
+				cout << "Enter member's name:" << endl;
+				cin.ignore();
+				getline(cin, s);
+				cout << "Enter position:" << endl;
+				cin >> pos;
+				ll2.addmember(n,s,pos);
+				ll.sort();
+				ll2.sort();
+				ll3 = ll.merge(ll2);
+				ll3.display();
 		}
 	}
 }
-
-
-
