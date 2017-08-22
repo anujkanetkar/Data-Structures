@@ -24,26 +24,31 @@ class Dcll
 	public:
 		Dcll()
 		{
-			Node *t, *r, *h;
-			//bool flag;
+			Node *t, *r;
 			int i, j;
 			for(i=0; i<10; i++)
 			{
-				p[i] = new Node;
-				p[i] -> next = NULL;
+				p[i] = NULL;
 			}
 			for(i=0; i<10; i++)
 			{
-				//flag = false;
 				for(j=0; j<7; j++)
 				{
-					t = p[i];
-					r = new Node;
-					t -> next = r;
-					r -> status = false;
-					r -> prev = t -> next;
-					r -> next = p[i];
-
+					if(p[i] == NULL)
+					{
+						r = new Node;
+						r -> status = false;
+						r -> prev = r -> next = r;
+					}
+					else
+					{
+						t = p[i] -> prev;
+						r = new Node;	
+						r -> status = false;
+						r -> prev = t;
+						r -> next = p[i];
+						t -> next = r;
+					}
 				}
 			}
 		}
