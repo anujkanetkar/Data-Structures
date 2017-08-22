@@ -39,6 +39,7 @@ class Dcll
 						r = new Node;
 						r -> status = false;
 						r -> prev = r -> next = r;
+						p[i] = r;
 					}
 					else
 					{
@@ -52,10 +53,28 @@ class Dcll
 				}
 			}
 		}
+
 		void available();
 		void book(int, int);
 		void cancel(int, int);
+		void display();
 };
+
+void Dcll :: display()
+{
+	int i, j;
+	Node *t;
+	for(i=0; i<10; i++)
+	{
+		t = p[i];
+		for(j=0; j<7; j++)
+		{
+			cout << t -> status << " ";
+			t = t -> next; 
+		}
+		cout << endl;
+	}
+}
 
 void Dcll :: available()
 {
@@ -69,6 +88,7 @@ void Dcll :: available()
 			if(t -> status == false)
 			{
 				cout << "The following seats are available:" << endl;
+				cout << t -> stat
 			}
 		}
 	}
@@ -117,8 +137,8 @@ int main()
 {
 	Dcll seats;
 	int choice, r, c;
-
-	while(true)
+	seats.display();
+	/*while(true)
 	{
 		cout << "1. Available seats" << endl;
 		cout << "2. Book seats(s)" << endl;
@@ -146,6 +166,6 @@ int main()
 			default:
 				cout << "Invalid choice code" << endl;
 		}
-	}
+	}*/
 }
 
