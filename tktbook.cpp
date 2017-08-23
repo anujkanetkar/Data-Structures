@@ -54,7 +54,6 @@ class Dcll
 			}
 		}
 
-		void available();
 		void book(int, int);
 		void cancel(int, int);
 		void display();
@@ -76,7 +75,7 @@ void Dcll :: display()
 	}
 }
 
-void Dcll :: available()
+/*void Dcll :: available()
 {
 	int i, j;
 	Node *t;
@@ -92,24 +91,41 @@ void Dcll :: available()
 			}
 		}
 	}
-}
+}*/
 
 void Dcll :: book(int r, int c)
 {
 	int i, j;
 	Node *t;
+	bool flag = false;	
 
 	for(i=0; i<10; i++)
 	{
 		t = p[i];
 		for(j=0; j<7; j++)
 		{
-			if(r == i && c == j)
+			if(t -> status == 1)
 			{
-				t -> status = true;
-				return;
+				flag = true;
+			}
+			else
+			{
+				if(r == i+1 && c == j+1)
+				{
+					t -> status = true;
+					return;		
+				}
+				else
+				{
+					t = t -> next;
+				}
 			}
 		}
+	}
+	if(flag == true)
+	{
+		cout << "Sold out" << endl;
+		return;
 	}
 
 }
@@ -124,10 +140,18 @@ void Dcll :: cancel(int r, int c)
 		t = p[i];
 		for(j=0; j<7; j++)
 		{
-			if(r == i && c == j)
+			if(t -> status == 0)
 			{
-				t -> status = false;
+				cout << "No booking made" << endl;
 				return;
+			}
+			else
+			{
+				if(r == i && c == j)
+				{
+					t -> status = false;
+					return;
+				}
 			}
 		}
 	}
@@ -137,8 +161,7 @@ int main()
 {
 	Dcll seats;
 	int choice, r, c;
-	seats.display();
-	/*while(true)
+	while(true)
 	{
 		cout << "1. Available seats" << endl;
 		cout << "2. Book seats(s)" << endl;
@@ -149,7 +172,7 @@ int main()
 		switch(choice)
 		{
 			case 1:
-				seats.available();
+				seats.display();
 				break;
 			case 2:
 				cout << "Enter the seat row and column to be booked:" << endl;
@@ -166,6 +189,6 @@ int main()
 			default:
 				cout << "Invalid choice code" << endl;
 		}
-	}*/
+	}
 }
 
