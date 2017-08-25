@@ -21,43 +21,45 @@ class Dcll
 {
 	private:
 		Node *p[10];
-	public:
-		Dcll()
-		{
-			Node *t, *r;
-			int i, j;
-			for(i=0; i<10; i++)
-			{
-				p[i] = NULL;
-			}
-			for(i=0; i<10; i++)
-			{
-				for(j=0; j<7; j++)
-				{
-					if(p[i] == NULL)
-					{
-						r = new Node;
-						r -> status = false;
-						r -> prev = r -> next = r;
-						p[i] = r;
-					}
-					else
-					{
-						t = p[i] -> prev;
-						r = new Node;	
-						r -> status = false;
-						r -> prev = t;
-						r -> next = p[i];
-						t -> next = r;
-					}
-				}
-			}
-		}
-
-		void book(int, int);
+	public:		
+		Dcll();
+		bool book(int, int);
+		bool isSold();
 		void cancel(int, int);
 		void display();
 };
+
+Dcll :: Dcll()
+{
+	Node *t, *r;
+	int i, j;
+	for(i=0; i<10; i++)
+	{
+		p[i] = NULL;
+	}
+	for(i=0; i<10; i++)
+	{
+		for(j=0; j<7; j++)
+		{
+			if(p[i] == NULL)
+			{
+				r = new Node;
+				r -> status = false;
+				r -> prev = r -> next = r;
+				p[i] = r;
+			}
+			else
+			{
+				t = p[i] -> prev;
+				r = new Node;	
+				r -> status = false;
+				r -> prev = t;
+				r -> next = p[i];
+				t -> next = r;
+			}
+		}
+	}
+}
 
 void Dcll :: display()
 {
@@ -75,25 +77,7 @@ void Dcll :: display()
 	}
 }
 
-/*void Dcll :: available()
-{
-	int i, j;
-	Node *t;
-	for(i=0; i<10; i++)
-	{
-		t = p[i];
-		for(j=0; j<7; j++)
-		{
-			if(t -> status == false)
-			{
-				cout << "The following seats are available:" << endl;
-				cout << t -> stat
-			}
-		}
-	}
-}*/
-
-void Dcll :: book(int r, int c)
+/*void Dcll :: book(int r, int c)
 {
 	int i, j;
 	Node *t;
@@ -104,15 +88,17 @@ void Dcll :: book(int r, int c)
 		t = p[i];
 		for(j=0; j<7; j++)
 		{
-			if(t -> status == 1)
+			if(t -> status == true)
 			{
 				flag = true;
+				t = t -> next;
 			}
 			else
 			{
 				if(r == i+1 && c == j+1)
 				{
 					t -> status = true;
+					//cout << i << " " << j << " " << t -> status;
 					return;		
 				}
 				else
@@ -127,7 +113,99 @@ void Dcll :: book(int r, int c)
 		cout << "Sold out" << endl;
 		return;
 	}
+}*/
 
+bool Dcll :: isSold()
+{
+	int i, j;
+	bool flag = false;
+	Node *t;
+
+	for(i=0; i<10; i++)
+	{
+		t = p[i];
+		for(j=0; j<7; j++)
+		{
+			if(t -> status == true)
+			{
+				flag = true;
+				t = t -> next;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+	if(flag == true)
+	{
+		return true;
+	}
+}
+
+bool Dcll :: book(int r, int c)
+{
+	int i; int j = 0;
+	bool flag;
+	Node *t;
+
+	/*for(i=0; i<10; i++)
+	{
+		t = p[i];
+		for(j=0; j<7; j++)
+		{
+			if(r == i+1 && c == j+1)
+			{
+				if(t -> status == true)
+				{
+					return false;
+				}
+				else
+				{
+					t -> status = true;
+					return true;
+				}
+			}
+			else
+			{
+				t = t -> next;
+			}
+		}
+	}*/
+	t = p[r-1];
+	/*for(j=0; j<7; j++)
+	{
+		if(c == j+1)
+		{
+			if(t -> status == true)
+			{
+				return false;
+			}
+			else
+			{
+				t -> status = true;
+				return true;
+			}
+		}
+		else
+		{
+			t = t -> next;
+		}
+	}*/
+	while(c != j+1)
+	{
+		t = t -> next;
+		j++;
+	}
+	if(t -> status == true)
+	{
+		return false;
+	}
+	else
+	{
+		t -> status = true;
+		return true;
+	}
 }
 
 void Dcll :: cancel(int r, int c)
@@ -140,7 +218,7 @@ void Dcll :: cancel(int r, int c)
 		t = p[i];
 		for(j=0; j<7; j++)
 		{
-			if(t -> status == 0)
+			if(t -> status == false)
 			{
 				cout << "No booking made" << endl;
 				return;
@@ -161,10 +239,11 @@ int main()
 {
 	Dcll seats;
 	int choice, r, c;
+	bool flag;
 	while(true)
 	{
 		cout << "1. Available seats" << endl;
-		cout << "2. Book seats(s)" << endl;
+		cout << "2. Book seat" << endl;
 		cout << "3. Cancel booking" << endl;
 		cout << "0. Exit" << endl;
 		cout << "Enter choice" << endl;
@@ -175,9 +254,23 @@ int main()
 				seats.display();
 				break;
 			case 2:
-				cout << "Enter the seat row and column to be booked:" << endl;
-				cin >> r >> c;
-				seats.book(r, c);
+				if(seats.isSold())
+				{
+					cout << "Sold out" << endl;
+				}
+				else
+				{
+					cout << "Enter the seat row and column to be booked:" << endl;
+					cin >> r >> c;
+					if(!seats.book(r, c))
+					{
+						cout << "Already booked" << endl;	
+					}
+					else
+					{
+						cout << "Your seat has been booked" << endl;
+					}
+				}
 				break;
 			case 3:
 				cout << "Enter the seat row and column to be cancelled:" << endl;
