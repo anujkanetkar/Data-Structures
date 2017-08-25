@@ -46,16 +46,16 @@ Dcll :: Dcll()
 				r = new Node;
 				r -> status = false;
 				r -> prev = r -> next = r;
-				p[i] = r;
+				p[i] = t = r;
 			}
 			else
 			{
-				t = p[i] -> prev;
 				r = new Node;	
 				r -> status = false;
 				r -> prev = t;
 				r -> next = p[i];
 				t -> next = r;
+				t = r;
 			}
 		}
 	}
