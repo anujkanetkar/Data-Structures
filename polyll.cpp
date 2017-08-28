@@ -93,21 +93,102 @@ int Poly :: evaluate(int x)
 Poly Poly :: add(Poly P)
 {
 	Poly res;
-	Node *t1, *t2;
-	t1 = p;
-	t2 = P.p;
-	while(t -> link != p && P.t -> link != p)
+	Node *t1, *t2, *t, *r;
+	/*while(t -> link != p && P.t -> link != p)
 	{
 		if(t1 -> exp == P.t2 -> exp)
 		{
 			
 		}
+	}*/
+	for(t1=p; t1->link!=p; t1=t1->link)
+	{
+		for(t2=P.p; t2->link!=P.p; t2=t2->link)
+		{
+			if(t1 -> exp == t2 -> exp)
+			{
+				if(res.p == NULL)
+				{
+					t = new Node;
+					t -> coeff = t1 -> coeff + t2 -> coeff;
+					t -> exp = t1 -> exp;
+					t -> link = t;
+					res.p = t;
+				}
+				else
+				{
+					r = new Node;
+					r -> coeff = t1 -> coeff + t2 -> coeff;
+					r -> exp = t1 -> exp;
+					t -> link = r;	
+					r -> link = res.p;
+					t = r;
+				}
+			}
+			else if(t1 -> exp > t2 -> exp)
+			{	
+				if(res.p == NULL)
+				{
+					t = new Node;
+					t -> coeff = t1 -> coeff;
+					t -> exp = t1 -> exp;
+					t -> link = t;
+					res.p = t;	
+				}
+				else
+				{
+					r = new Node;
+					r -> coeff = t1 -> coeff;
+					r -> exp = t1 -> exp;
+					r -> link = res.p;
+					t = r;
+				}
+			}
+			else
+			{	
+				if(res.p == NULL)
+				{	
+					t = new Node;
+					t -> coeff = t2 -> coeff;
+					t -> exp = t2 -> exp;
+					t -> link = t;
+					res.p = t;
+				}	
+				else
+				{
+					r = new Node;
+					r -> coeff = t2 -> coeff;
+					r -> exp = t2 -> exp;
+					r -> link = res.p;
+					t = r;
+				}
+			}
+		}
 	}
+	while(t1 -> link != p)
+	{
+		t = new Node;
+		t -> coeff = t1 -> coeff;
+		t -> exp = t1 -> exp;
+		r -> link = t;
+		t -> link = res.p;
+		t1 = t1 -> link;
+	}
+	while(t2 -> link != p)
+	{
+		t = new Node;
+		t -> coeff = t2 -> coeff;
+		t -> exp = t2 -> exp;
+		r -> link = t;
+		t -> link = res.p;
+		t2 = t2 -> link;
+	}
+	return res;	
 }
 
 int main()
 {
-	Poly p1;
+	Poly p1, p2, p3;
 	int choice, x, ans;
 	while(true)
 	{
