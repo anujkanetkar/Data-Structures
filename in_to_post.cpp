@@ -1,28 +1,30 @@
 #include <iostream> 
 #include <string>
+#include <cstdlib>
 
 using namespace std; 
 
 const int MAX = 100;
 
-template <class T>
 class Stack
 { 
 	private:
-		T a[MAX];
-		int top; 
+		char a[MAX];
+		//int top; 
 	public:
+		int top;
 		Stack()
 		{
 			top = -1;
 		} 
 
-		void push(T);
-		T pop();
+		void push(char);
+		char pop();
+		bool isEmpty();
 };
 
-template <class T>
-void Stack <class T> :: push(T t)
+//template <class T>
+void Stack :: push(char t)
 {
 	if(top == MAX - 1)
 	{
@@ -35,8 +37,8 @@ void Stack <class T> :: push(T t)
 	}
 }
 
-template <class T>
-T Stack <class T> :: pop()
+//template <class T>
+char Stack :: pop()
 {
 	if(top == -1)
 	{
@@ -44,10 +46,22 @@ T Stack <class T> :: pop()
 	}
 	else
 	{
-		T t;
-		t = a[top];
+		char c;
+		c = a[top];
 		top--;
-		return t;	
+		return c;	
+	}
+}
+
+bool Stack :: isEmpty()
+{
+	if(top == -1)	
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 
@@ -61,12 +75,16 @@ class Post
 			 expr = '\0';
 		}
 
-		void convert();
+		void convert(string);
 		void display();
+		int priority(char);
+		int isoperator(char);
+		int evaluate();
 };  
 
 void Post :: convert(string exp)
 {	
+	Stack s;
 	int i = 0;
 	char opr;
 	while(exp[i] != '\0')
@@ -78,32 +96,33 @@ void Post :: convert(string exp)
 			
 		if(exp[i] == '(')
 		{
-			push(exp[i]);
+			s.push(exp[i]);
 			i++;
 		}
 		if(isdigit(exp[i]) || isalpha(exp[i]))
 		{
-			expr.append(exp[i]);
+			expr += exp[i];
 			i++;
 		}
 		if(isoperator(exp[i]))
 		{
-			if(top != -1)
+			if(!s.isEmpty())
 			{
-				opr = pop();
+				opr = s.pop();
 				while(priority(opr) >= priority(exp[i]));
 				{
-					expr.append(opr);
-					opr = pop();		
+					expr += opr;
+					opr = s.pop();		
 				}
-				push(exp[i]);
-				i++;
+				//s.push(exp[i]);
+				s.push(opr);
+				//i++;
 			}
-			else
-			{
-				push(exp[i]);
+			//else
+			//{
+				s.push(exp[i]);
 				i++;
-			}				
+			//}				
 		}		
 	}
 }
@@ -115,19 +134,20 @@ void Post :: display()
 
 int Post :: evaluate()
 {
+	Stack s1;
 	int i = 0;
-	int n1, n2, res;
+	int n1, n2, n3, res;
 	while(expr[i] != '\0')
 	{
 		if(isdigit(expr[i]))
 		{
 			res = expr[i];
-			push(expr[i]);
+			s1.push(expr[i]);
 		}
 		else
 		{
-			n1 = pop();
-			n2 = pop();
+			n1 = s1.pop() - 48;
+			n2 = s1.pop() - 48;
 			switch(expr[i])
 			{
 				case '+':
@@ -145,15 +165,15 @@ int Post :: evaluate()
 					n3 = n2 / n1;
 					break;
 			}
-			push(n3);
+			s1.push(n3);
 		}
 		i++;
 	}
-	res = pop();
+	res = s1.pop() - 48;
 	return res;
 }
 
-int priority(char ch)
+int Post :: priority(char ch)
 {
 	if(ch == '/' || ch == '*')
 	{
@@ -166,7 +186,7 @@ int priority(char ch)
 	return 0;
 }
 
-int isoperator(char ch)
+int Post :: isoperator(char ch)
 {
 	string s = "+-*/";
 	int i = 0;
@@ -186,7 +206,8 @@ int main()
 	Post p;
 	string infix;
 	int ans;
-	while(true)
+	char choice = 'y';
+	while(choice == 'y')
 	{
 		cout << "Enter an expression in Infix form" << endl;
 		cin.ignore();
@@ -194,6 +215,9 @@ int main()
 		cout << "Postfix form is:";
 		p.convert(infix);
 		p.display();
-		ans = p.evaluate();	
+		ans = p.evaluate();
+		cout << ans << endl;
+		cout << "Continue? (y/n)" << endl;
+		cin >> choice;	
 	}
 }
