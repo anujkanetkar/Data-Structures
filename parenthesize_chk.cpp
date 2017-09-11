@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdio>
 
 using namespace std;
 
@@ -15,13 +16,13 @@ class Stack
 			top = -1;
 		}
 
-		//bool isFull();
-		//bool isEmpty();
+		bool isFull();
+		bool isEmpty();
 		void push(char);
 		char pop();
 };
 
-/*bool Stack :: isFull()
+bool Stack :: isFull()
 {
 	if(top == MAX-1)
 	{
@@ -31,9 +32,9 @@ class Stack
 	{
 		return false;
 	}
-}*/
+}
 
-/*bool Stack :: isEmpty()
+bool Stack :: isEmpty()
 {
 	if(top == -1)
 	{
@@ -43,60 +44,39 @@ class Stack
 	{
 		return false;
 	}
-}*/
+}
 
 void Stack :: push(char ch)
 {
-	if(top == MAX-1)
-	{
-		throw("Stack is full");
-	}
-	else
-	{
-		top++;
-		str[top] = ch;
-	}
+	top++;
+	str[top] = ch;
 }
 
 char Stack :: pop()
 {
 	char ch;
-	if(top == -1)
-	{
-		throw("Stack is empty");	
-	}
-	else
-	{
-		ch = str[top];
-		top--;
-		return ch;
-	}
+	ch = str[top];
+	top--;
+	return ch;
 }
-
-int isMatching();
 
 int main()
 {
-	//Stack s;
-	//bool flag1, flag2, flag3;
-	//flag1 = flag2 = flag3 = true;
-	//char exp[MAX], par;
-	//char choice;
-	int i;
-	
-	try
-	{
-		i = isMatching();
-	}
+	Stack s;
+	bool flag1, flag2, flag3;
 
-	catch(string s)
+	char exp[MAX], par;
+	char choice;
+	int i;
+
+	do
 	{
-		cout << s << endl;
-	}
-	/*do
-	{
+		flag1 = flag2 = flag3 = true;
 		cout << "Enter the expression:" << endl;
+		//fflush(stdin);
 		cin >> exp;
+		i = 0;
+
 		if(exp[0] == '}' || exp[0] == ']' || exp[0] == ')')
 		{
 			cout << "Invalid expression" << endl;
@@ -149,7 +129,7 @@ int main()
 							}
 							else
 							{
-								cout << "Expression not well parenthesized" << endl;
+								//cout << "Expression not well parenthesized" << endl;
 								flag1 = false;
 							}
 						}
@@ -170,7 +150,7 @@ int main()
 							}
 							else
 							{
-								cout << "Expression not well parenthesized" << endl;
+								//cout << "Expression not well parenthesized" << endl;
 								flag2 = false;
 							}
 						}
@@ -191,7 +171,7 @@ int main()
 							}
 							else
 							{
-								cout << "Expression not well parenthesized" << endl;
+								//cout << "Expression not well parenthesized" << endl;
 								flag3 = false;
 							}
 						}
@@ -204,92 +184,22 @@ int main()
 				}
 				i++;
 			}
-		}
-		if(flag1 == true && flag2 == true && flag3 == true)
-		{
-			cout << "Expression is well parenthesized" << endl;
-		}
-		cout << "Continue? (y/n)" << endl;
-		cin >> choice;
-	}while(choice != 'n');*/
-}
-
-int isMatching()
-{
-	Stack s;
-	bool flag = true;
-	int i = 0;
-	char choice;
-	char exp[MAX];
-	do
-	{
-		cout << "Enter the expression";
-		cin >> exp;
-		while(exp[i] != '\0')
-		{
-			if(exp[0] == '}' || exp[0] == ']' || exp[0] == ')')
-                	{
-                	        cout << "Invalid expression" << endl;
-                	        return 0;
-                	}
+			if(flag1 == true && flag2 == true && flag3 == true)
+					{
+						cout << "Expression is well parenthesized" << endl;
+					}
 			else
 			{
-				if(exp[i] == '(' || exp[i] == '[' || exp[i] == '{')
-				{
-					s.push(exp[i]);
-					i++;
-					continue;
-				}
-				if(exp[i] == ')')
-				{
-					if(s.pop() == '(')
-					{
-						i++;
-						continue;
-					}
-					else
-					{
-						cout << "Not well parenthesized";
-						return 0;
-					}
-				}
-				if(exp[i] == ']')
-                                {
-                                        if(s.pop() == '[')
-                                        {
-                                                i++;
-                                                continue;
-                                        }
-                                        else
-                                        {
-                                                cout << "Not well parenthesized";
-                                                return 0;
-                                        }
-                                }
-				if(exp[i] == '}')
-                                {
-                                        if(s.pop() == '{')
-                                        {
-                                                i++;
-                                                continue;
-                                        }
-                                        else
-                                        {
-                                                cout << "Not well parenthesized";
-                                                return 0;
-                                        }
-                                }
-				flag = false;
+				cout << "Expression not well parenthesized" << endl;
 			}
+					//cout << "Continue? (y/n)" << endl;
 		}
+		/*if(flag1 == true && flag2 == true && flag3 == true)
+		{
+			cout << "Expression is well parenthesized" << endl;
+		}*/
+		cout << "Continue? (y/n)" << endl;
+		cin >> choice;
+		//fflush(stdin);
 	}while(choice != 'n');
-	if(flag == false)
-	{
-		cout << "Not well parenthesized";
-		return 0;
-	}
-	else
-	{
-		cout << "Expression is well parenthesized" << endl;
-	}
 }
