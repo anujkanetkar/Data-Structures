@@ -123,8 +123,24 @@ void Post :: convert(string exp)
 				s.push(exp[i]);
 				i++;
 			//}				
+		}
+		if(exp[i] == ')')
+		{
+			opr = s.pop();
+			while(opr != '(')
+			{
+				expr += opr;
+				opr = s.pop(); 
+			}
+			i++;
 		}		
 	}
+	while(!s.isEmpty())
+	{
+		opr = s.pop();
+		expr += opr;
+	}
+	expr += '\0';
 }
 
 void Post :: display()
