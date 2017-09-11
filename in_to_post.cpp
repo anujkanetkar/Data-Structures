@@ -210,8 +210,9 @@ int main()
 	while(choice == 'y')
 	{
 		cout << "Enter an expression in Infix form" << endl;
-		cin.ignore();
-		getline(cin, infix);
+		//cin.ignore();
+		//getline(cin, infix);
+		cin >> infix;
 		cout << "Postfix form is:";
 		p.convert(infix);
 		p.display();
