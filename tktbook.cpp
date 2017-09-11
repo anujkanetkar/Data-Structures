@@ -25,7 +25,7 @@ class Dcll
 		Dcll();
 		bool book(int, int);
 		bool isSold();
-		void cancel(int, int);
+		bool cancel(int, int);
 		void display();
 };
 
@@ -208,12 +208,12 @@ bool Dcll :: book(int r, int c)
 	}
 }
 
-void Dcll :: cancel(int r, int c)
+bool Dcll :: cancel(int r, int c)
 {
 	int i, j;
 	Node *t;
 
-	for(i=0; i<10; i++)
+	/*for(i=0; i<10; i++)
 	{
 		t = p[i];
 		for(j=0; j<7; j++)
@@ -225,13 +225,29 @@ void Dcll :: cancel(int r, int c)
 			}
 			else
 			{
-				if(r == i && c == j)
+				if(r == i+1 && c == j+1)
 				{
 					t -> status = false;
 					return;
 				}
 			}
 		}
+	}*/
+	
+	t = p[r-1];
+	while(c != j+1)
+	{
+		t = t -> next;
+		j++;
+	}
+	if(t -> status == true)
+	{
+		t -> status = false;
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 
@@ -275,7 +291,14 @@ int main()
 			case 3:
 				cout << "Enter the seat row and column to be cancelled:" << endl;
 				cin >> r >> c;
-				seats.cancel(r, c);
+				if(!seats.cancel(r, c))
+				{
+					cout << "No booking made" << endl;
+				}
+				else
+				{
+					cout << "Your booking has been cancelled" << endl;
+				}
 				break;
 			case 0:
 				exit(1);
