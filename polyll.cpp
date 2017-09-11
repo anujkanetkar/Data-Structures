@@ -62,6 +62,14 @@ void Poly :: input()
 		cout << "Continue? (y/n)" << endl;
 		cin >> ch; 
 	}
+
+	cout << p << endl ;
+	cout << p -> link << endl ;
+	cout << t << endl ;
+	cout << t-> link << endl ;
+	cout << r << endl ;
+	cout << r->link << endl ;
+	
 }
 
 void Poly :: display()
@@ -94,19 +102,14 @@ Poly Poly :: add(Poly P)
 {
 	Poly res;
 	Node *t1, *t2, *t, *r;
-	/*while(t -> link != p && P.t -> link != p)
-	{
-		if(t1 -> exp == P.t2 -> exp)
-		{
-			
-		}
-	}*/
+	
 	for(t1=p; t1->link!=p; t1=t1->link)
 	{
 		for(t2=P.p; t2->link!=P.p; t2=t2->link)
 		{
 			if(t1 -> exp == t2 -> exp)
 			{
+				cout << "Exp equal" << endl;
 				if(res.p == NULL)
 				{
 					t = new Node;
@@ -165,6 +168,8 @@ Poly Poly :: add(Poly P)
 			}
 		}
 	}
+	cout << "now balance" ;
+
 	while(t1 -> link != p)
 	{
 		t = new Node;
@@ -188,7 +193,7 @@ Poly Poly :: add(Poly P)
 
 int main()
 {
-	Poly p1, p2, p3;
+	Poly p1, p2, p3, p4;
 	int choice, x, ans;
 	while(true)
 	{
@@ -207,12 +212,18 @@ int main()
 				ans = p1.evaluate(x);
 				cout << "Result is: " << ans << endl; 
 			case 2:
-				p1.input();
-				p1.display();
 				p2.input();
 				p2.display();
-				p3 = p1.add(p2);
-				p3.display();		
+				cout << "first over" << endl ;
+
+				p3.input();
+				p3.display();
+				cout << "Second done, now add " << endl ;
+
+				p4 = p2.add(p3);
+				cout << "add over" ; 
+
+				p4.display();		
 			case 0:
 				exit(1);
 			default:
