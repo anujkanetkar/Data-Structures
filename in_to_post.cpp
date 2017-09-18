@@ -204,12 +204,12 @@ int Post::isoperator(char ch)
 
 int main()
 {
-	Post p;
 	string infix;
 	int ans;
 	char choice = 'y';
 	while (choice == 'y')
 	{
+		Post p;
 		cout << "Enter an expression in Infix form" << endl;
 		//cin.ignore();
 		//getline(cin, infix);
