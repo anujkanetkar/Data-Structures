@@ -29,37 +29,45 @@ void Sort :: getper(int n)
 
 void Sort :: selsort(int n)
 {
-	int i, j, temp;
+	int i, j;
+	float temp;
+	int min;
 
 	for(i=0; i<n-1; i++)
 	{
+		min = i;
 		for(j=i+1; j<n; j++)
 		{
-			if(a[i] > a[j])
+			if(a[min] > a[j])
 			{
-				temp = a[i];
-				a[i] = a[j];
-				a[j] = temp;
-			}
+				min = j;
+			}	
 		}
+		temp = a[min];
+		a[min] = a[i];
+		a[i] = temp;
 	}
 }
 
 void Sort :: bubbsort(int n)
 {
 	int i, j, temp;
-
+	bool flag;
 	for(i=0; i<n-1; i++)
 	{
+		flag = false;
 		for(j=0; j<n-1-i; j++)
 		{
 			if(a[j] > a[j+1])
 			{
+				flag = true;
 				temp = a[j];
 				a[j] = a[j+1];
 				a[j+1] = temp;
 			}
 		}
+		if(flag == false)
+			break;
 	}
 }
 
