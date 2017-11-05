@@ -33,6 +33,7 @@ Dcll :: Dcll()
 {
 	Node *t, *r;
 	int i, j;
+	int x;
 	for(i=0; i<10; i++)
 	{
 		p[i] = NULL;
@@ -44,14 +45,22 @@ Dcll :: Dcll()
 			if(p[i] == NULL)
 			{
 				r = new Node;
-				r -> status = false;
+				 x = rand() % 2;
+				if(x >= 0.5)
+					r -> status = true;
+				else
+					r -> status = false;
 				r -> prev = r -> next = r;
 				p[i] = t = r;
 			}
 			else
 			{
 				r = new Node;	
-				r -> status = false;
+				x = rand() % 2;
+				if(x >= 0.5)
+					r -> status = true;
+				else
+					r -> status = false;
 				r -> prev = t;
 				r -> next = p[i];
 				t -> next = r;
