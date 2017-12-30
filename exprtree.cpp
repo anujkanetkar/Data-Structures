@@ -22,6 +22,11 @@ class BET
 		bool isoperator(char);	
 		int priority(char);
 		string convert(string);
+		void preorder(Node*);
+		void postorder(Node*);
+		void inOrder(Node*);
+		void preOrder(Node*);
+		void postOrder(Node*);
 };
 
 BET::BET()
@@ -44,20 +49,23 @@ string BET::convert(string s)
 	{
 		if(s[i] == '(')
 			stk.push(s[i]);
-		if(isalpha(s[i]))
+		else if(isalpha(s[i]))
 			post = post + s[i];
-		if(isoperator(s[i]))
+		else if(isoperator(s[i]))
 		{
-			if(priority(stk.top()) >= priority(s[i]))
+			if(!stk.empty())
 			{
-				post = post + stk.top();
-				stk.pop();
+				while(!stk.empty() && priority(stk.top()) >= priority(s[i]))
+				{
+					post = post + stk.top();
+					stk.pop();
+				}
 			}
 			stk.push(s[i]);
 		}
-		if(s[i] == ')')
+		else if(s[i] == ')')
 		{
-			while(stk.top() != ')')
+			while(stk.top() != '(')
 			{
 				post = post + stk.top();
 				stk.pop();
@@ -75,7 +83,7 @@ string BET::convert(string s)
 	return post;
 }
 
-/*void BET::create(string str)
+void BET::create(string str)
 {
 	stack <Node*> s;
 	
@@ -99,13 +107,15 @@ string BET::convert(string s)
 		else
 		{
 			Node *t = new Node;
+			t->left = t->right = NULL;
+			t->data = str[i];
 			s.push(t);
 		}
 	}
 
 	root = s.top();
 	s.pop();
-}*/
+}
 
 bool BET::isoperator(char ch)
 {
@@ -135,8 +145,104 @@ void BET::inorder(Node *r)
 	if(r == NULL)
 		return;
 	inorder(r->left);
-	cout << r->data << "\t";
+	cout << r->data << " ";
 	inorder(r->right);
+}
+
+void BET::preorder(Node *r)
+{
+	if(r == NULL)
+		return;
+	cout << r->data << " ";
+	preorder(r->left);
+	preorder(r->right);
+}
+
+void BET::postorder(Node *r)
+{
+	if(r == NULL)
+		return;
+	postorder(r->left);
+	postorder(r->right);
+	cout << r->data << " ";
+}
+
+void BET::inOrder(Node *r)
+{
+	stack <Node*> s;
+
+	while(true)
+	{
+		while(r != NULL)
+		{
+			s.push(r);
+			r = r->left;
+		}
+		if(!s.empty())
+		{
+			r = s.top();
+			s.pop();
+			cout << r->data << " ";
+			r = r->right;
+		}
+		else
+			break;
+	}
+}
+
+void BET::preOrder(Node *r)
+{
+	stack <Node*> s;
+
+	while(true)
+	{
+		while(r != NULL)
+		{
+			cout << r->data << " ";
+			s.push(r);
+			r = r->left;
+		}
+		if(!s.empty())
+		{
+			r = s.top();
+			s.pop();
+			r = r->right;
+		}
+		else
+			break;
+	}
+}
+
+void BET::postOrder(Node *r)
+{
+	stack <Node*> s;
+	
+	do
+	{
+		while(r != NULL)
+		{
+			if(r->right != NULL)
+				s.push(r->right);
+			s.push(r);
+			r = r->left;
+		}
+
+		r = s.top();
+		s.pop();
+		
+		if(!s.empty() && r->right != NULL && r->right == s.top())
+		{
+			Node *t = s.top();
+			s.pop();
+			s.push(r);
+			r = t;	
+		}
+		else
+		{
+			cout << r->data << " ";
+			r = NULL;
+		}
+	}while(!s.empty());	
 }
 
 int main()
@@ -145,8 +251,20 @@ int main()
 	//string expr = "abc*-de/f+";
 	BET expTree;
 	string expr = expTree.convert(in);
-	cout << expr;
-	//expTree.create(expr);
-	//Node *root = expTree.getRoot();
-	//expTree.inorder(root);
+	//cout << expr;
+	expTree.create(expr);
+	Node *root = expTree.getRoot();
+	expTree.inorder(root);
+	cout << endl;
+	expTree.preorder(root);
+	cout << endl;
+	expTree.postorder(root);
+	cout << endl;
+	expTree.inOrder(root);
+	cout << endl;
+	expTree.preOrder(root);
+	cout << endl;
+	expTree.postOrder(root);
+
+	return 0;
 }
