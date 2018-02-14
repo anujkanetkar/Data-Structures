@@ -21,6 +21,7 @@ class ThreadedBT
 		Node* getRoot();
 		void create(int);
 		void inorder();
+		void preorder();
 };  
 
 ThreadedBT::ThreadedBT()
@@ -114,6 +115,34 @@ void ThreadedBT::inorder()
 	}
 }
 
+void ThreadedBT::preorder()
+{
+	Node *p;
+	Node *h = root;
+	p = h->left;
+
+	while(p != h)
+	{
+		cout << p->data << " ";
+
+		if(p->lt == false)
+			p = p->left;
+
+		else
+		{
+			if(p->rt == false)
+				p = p->right;
+			else
+			{
+				while(p != h && p->rt == true)
+					p = p->right;
+				if(p != h)
+					p = p->right;
+			}
+		}
+	}
+}
+
 int main()
 {
 	ThreadedBT thtree;
@@ -137,6 +166,8 @@ int main()
 			case 2:
 				thtree.inorder();
 				cout << endl; 
+				thtree.preorder();
+				cout << endl;
 				break;
 			case 0:
 				exit(1);
